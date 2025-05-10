@@ -186,9 +186,22 @@ export const getMatchDetails = (id) => {
   const match =
     [...mockData.liveMatches, ...mockData.pastMatches].find((m) => m.id === id) ||
     mockData.liveMatches[0];
-
+  const ball_data={
+    ball_number: 42.4,
+    batsman: "Virat Kohli",
+    bowler: "Mitchel Starc",
+    runs_scored: 1,
+    extras: { wides: 0, no_balls: 0, byes: 0, leg_byes: 0 },
+    wicket: { is_wicket: true },
+    match_context: {
+      current_score: { runs: 256, wickets: 4 },
+      overs: 42.3,
+      target: null
+    }
+  }
   return {
     match,
+    ball_data,
     commentary: mockData.commentary
   };
 };

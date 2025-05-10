@@ -4,22 +4,24 @@ import LiveMatchCard from "@/components/LiveMatchCard";
 import PastMatchCard from "@/components/PastMatchCard";
 import { apiService } from "@/utils/apiService";
 import { Skeleton } from "@/components/ui/skeleton";
+import isEqual from "lodash.isequal"; // ✅ Import lodash.isequal for deep comparison
 
 const Index = () => {
-  const [liveMatches, setLiveMatches] = useState([]);
+  const [liveMatches, setLiveMatches] = useState({});
   const [pastMatches, setPastMatches] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Initial fetch of live and past matches
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchInitialData = async () => {
       try {
         const [liveData, pastData] = await Promise.all([
           apiService.getLiveMatches(),
-          apiService.getPastMatches()
+          apiService.getPastMatches(),
         ]);
 
         setLiveMatches(liveData);
-        setPastMatches(pastData.slice(0, 3)); // Limit to 3 past matches on the homepage
+        setPastMatches(pastData.slice(0, 3));
         setLoading(false);
       } catch (error) {
         console.error("Error fetching match data:", error);
@@ -27,8 +29,34 @@ const Index = () => {
       }
     };
 
-    fetchData();
+    fetchInitialData();
   }, []);
+
+  // Periodic refresh of live match data every 15s
+  useEffect(() => {
+    const fetchLiveMatches = async () => {
+      try {
+        const liveData = await apiService.getLiveMatches();
+
+        // Update only if data changed
+        setLiveMatches(prev =>
+          isEqual(prev, liveData) ? prev : liveData
+        );
+      } catch (error) {
+        console.error("Error refreshing live matches:", error);
+      }
+    };
+
+    const interval = setInterval(fetchLiveMatches, 30000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Debug log
+  useEffect(() => {
+    console.log("Updated liveMatches:", liveMatches);
+    console.log("Match count:", liveMatches.livematches?.length);
+  }, [liveMatches]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -65,9 +93,9 @@ const Index = () => {
                 </div>
               ))}
             </div>
-          ) : liveMatches.length > 0 ? (
+          ) : liveMatches.livematches?.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {liveMatches.map((match) => (
+              {liveMatches.livematches?.map((match) => (
                 <LiveMatchCard key={match.id} {...match} />
               ))}
             </div>

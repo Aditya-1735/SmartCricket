@@ -1,6 +1,8 @@
+api_key = "1a0eae78-ad94-4d8a-9066-4b2bd9c55996"
+series_id = "d5a498c8-7596-4b93-8ab0-e0efc3345312"
 import requests
 
-def get_ongoing_matches(api_key, series_id):
+def get_ongoing_matches(api_key, series_id=series_id):
     url = f"https://api.cricapi.com/v1/currentMatches?apikey={api_key}&offset=0"
     
     response = requests.get(url)
@@ -34,8 +36,6 @@ def get_ongoing_matches(api_key, series_id):
         return "No ongoing matches found in the given series."
 
 # Example usage
-api_key = "1a0eae78-ad94-4d8a-9066-4b2bd9c55996"
-series_id = "d5a498c8-7596-4b93-8ab0-e0efc3345312"
 matches = get_ongoing_matches(api_key, series_id)
 
 if isinstance(matches, str):  # If no matches found or error occurred

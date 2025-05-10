@@ -22,7 +22,8 @@ const PastMatches = () => {
 
     fetchData();
   }, []);
-
+  console.log(pastMatches)
+  // console.log(pastMatches.length)
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />

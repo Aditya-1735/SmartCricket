@@ -16,12 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from myapp.views import Home,about,predict_score_view,fetch_live_score
-
+from myapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',Home,name='home'),
-    path('about/',about,name="about"),
-    path('fetch-live-score/', fetch_live_score, name='fetch_live_score'),
-    path('predict-score/', predict_score_view, name='predict_score'),
+    path('',views.Home,name='home'),
+    path('about/',views.about,name="about"),
+    path('api/fetch-live-score/', views.fetch_match_details, name='fetch_live_score'),
+    path('api/predict-score/', views.predict_score_view, name='predict_score'),
+    path('api/commentary/', views.generate_commentary_view, name='commentary'),
+    path('api/match-details/', views.get_match_details, name='match-details'),
+    path('api/match/<str:match_id>/', views.get_single_match, name='get_single_match'),
 ]

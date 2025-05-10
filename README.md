@@ -4,7 +4,7 @@ Installation
 pip install virtualenv
 virtualenv myenv
 myenv\Scripts\activate
-pip install django
+pip install -r requirements.txt
 ```
 Run server
 ```

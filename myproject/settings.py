@@ -50,7 +50,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
+    # 'corsheaders.middleware.CorsMiddleware'
+    'corsheaders.middleware.CorsMiddleware',  # Add this line
+    'django.middleware.common.CommonMiddleware',
 ]
 CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'myproject.urls'

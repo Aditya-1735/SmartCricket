@@ -1,22 +1,59 @@
-import { mockData, getMatchDetails } from "@/utils/mockData";
+import axios from "axios";
+import { getMatchDetails } from "./mockData";
 
-// This is a mock API service that simulates fetching data from an API
+const API_BASE_URL = "http://localhost:8000";
+
 export const apiService = {
   getLiveMatches: async () => {
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return mockData.liveMatches;
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/fetch-live-score/`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching live matches:", error);
+      return { livematches: [] };
+    }
   },
 
   getPastMatches: async () => {
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return mockData.pastMatches;
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/match-details/`);
+      return response.data.pastMatches;
+    } catch (error) {
+      console.error("Error fetching match details:", error);
+      return [];
+    }
   },
 
   getMatchDetails: async (id) => {
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 700));
-    return getMatchDetails(id);
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/match/${id}/`);
+      return response.data.match;
+    } catch (error) {
+      console.error("Error fetching single match details:", error);
+      throw error;
+    }
+  },
+
+  predictScore: async (features) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/api/predict-score/`, features);
+      return response.data.predicted_score;
+    } catch (error) {
+      console.error("Error predicting score:", error);
+      throw error;
+    }
+  },
+
+  generateCommentary: async (ballData, style = "") => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/api/commentary/`, {
+        ...ballData,
+        additional_context: style
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error generating commentary:", error);
+      throw error;
+    }
   }
-};
+}
