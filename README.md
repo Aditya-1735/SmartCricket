@@ -11,11 +11,6 @@ Run server
 python manage.py runserver
 ```
 
-for commentary model
-```
-pip install google-genai
-```
-
 frontend dependencies
 ```
 npm install react-router-dom lucide-react --legacy-peer-deps

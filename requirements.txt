@@ -6,5 +6,5 @@ django
 django-cors-headers
 djangorestframework
 google-genai
-
+python-dotenv
 
